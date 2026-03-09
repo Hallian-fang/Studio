@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/32X32.ico">
+    <title>哈利製(中国大陆)-官方网站</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000', // 黑色
+                        secondary: '#333333', // 深灰色
+                        light: '#FFFFFF',
+                        dark: '#000000',
+                        'apple-gray': '#86868b',
+                        'apple-light-gray': '#f5f5f7',
+                        'apple-dark-gray': '#1d1d1f',
+                    },
+                    fontFamily: {
+                        sans: ['SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        'slide-up': 'slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        'bounce-subtle': 'bounceSubtle 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(-2px)' },
+                            '50%': { transform: 'translateY(2px)' },
+                        }
+                    },
+                    boxShadow: {
+                        'apple': '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01)',
+                        'apple-hover': '0 24px 38px -12px rgba(0, 0, 0, 0.08), 0 4px 25px -12px rgba(0, 0, 0, 0.03)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 弹窗背景遮罩 */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* 半透明黑色背景 */
+        }
+        /* 弹窗内容框 */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 居中 */
+            padding: 20px;
+            border-radius: 10px;
+            width: 450px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        /* 关闭按钮 */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+        .close:hover {
+            color: black;
+        }
+        /* 下载按钮样式 */
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* 下载链接列表 */
+        .download-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px auto 0;
+            justify-items: center;
+        }
+
+        .download-list a {
+            display: block;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+            width: 100%;
+        }
+        .download-list a:hover {
+            background-color: #ddd;
+        }
+    </style>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .transition-all-300 {
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .card-hover {
+                transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .card-hover:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--tw-shadow-apple-hover);
+            }
+            .backdrop-blur-md {
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+            }
+            .backdrop-blur-sm {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+            .grayscale {
+                filter: grayscale(100%);
+                -webkit-filter: grayscale(100%);
+            }
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+            .hero-title {
+                font-weight: 600;
+                letter-spacing: -0.02em;
+            }
+            .hero-subtitle {
+                font-weight: 400;
+                letter-spacing: 0.01em;
+            }
+            .section-title {
+                font-weight: 600;
+                letter-spacing: -0.01em;
+            }
+            .nav-link {
+                position: relative;
+                transition: color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 1px;
+                bottom: -4px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: var(--tw-color-primary);
+                transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .nav-link:hover::after, .nav-link.active::after {
+                width: 100%;
+            }
+            .product-image-container {
+                overflow: hidden;
+                border-radius: 16px;
+            }
+            .product-image {
+                transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .product-image-container:hover .product-image {
+                transform: scale(1.02);
+            }
+            .btn-primary {
+                transition: background-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            .btn-outline {
+                transition: background-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .btn-outline:hover {
+                transform: translateY(-1px);
+            }
+            .sticky-nav {
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                background-color: rgba(255, 255, 255, 0.7);
+            }
+            .dark .sticky-nav {
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+        }
+    </style>
+</head>
+<body class="bg-light text-dark font-sans antialiased overflow-x-hidden">
+    <!-- 导航栏 - 苹果风格 -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <a href="#features" class="flex items-center">
+                        <svg enable-background="new 0 0 50 50" height="25" viewBox="0 0 131.95 131.95" width="25" xmlns="http://www.w3.org/2000/svg" fill=black>
+                    <path d="m65.97,0C29.54,0,0,29.54,0,65.97s29.54,65.97,65.97,65.97,65.97-29.54,65.97-65.97S102.41,0,65.97,0Zm4.73,106.75h-9.46v-15.11c-.05-3.34-.58-9.1-3.55-15.45-3.62-7.72-8.96-12.27-11.76-14.35v44.91h-9.46V25.2h9.46v27.17c3.64,2.7,9.94,7.99,15.31,16.45,1.31,2.06,2.57,4.32,3.72,6.77,4.81,10.27,5.66,19.59,5.75,25v6.16Zm24.77,0h-9.46v-27.17c-3.64-2.7-9.94-7.99-15.31-16.45-1.31-2.06-2.57-4.32-3.72-6.77-4.81-10.27-5.66-19.59-5.75-25v-6.16h9.46v15.11c.05,3.34.58,9.1,3.55,15.45,3.62,7.72,8.96,12.27,11.76,14.35V25.2h9.46v81.54Z"/>
+                </svg>
+                        <span class="ml-4 text-base font-semibold tracking-tight">哈利製工作室</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-10">
+                    <a href="#features" class="nav-link text-sm font-medium tracking-wide text-apple-gray hover:text-primary">功能</a>
+                    <a href="#scenarios" class="nav-link text-sm font-medium tracking-wide text-apple-gray hover:text-primary">场景</a>
+                    <a href="#comparison" class="nav-link text-sm font-medium tracking-wide text-apple-gray hover:text-primary">优势</a>
+                    <a href="#download" class="nav-link text-sm font-medium tracking-wide text-apple-gray hover:text-primary">下载</a>
+                </nav>
+                <div class="flex items-center space-x-6">
+                    <a href="#download" class="hidden md:inline-block btn-primary bg-primary text-white px-8 py-3 rounded-full text-base font-medium shadow-lg">
+                        立即下载
+                    </a>
+                    <button class="md:hidden text-apple-gray focus:outline-none" id="menu-toggle">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden hidden transition-all duration-300" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 backdrop-blur-md bg-white/90">
+                <a href="#features" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-apple-light-gray">功能</a>
+                <a href="#scenarios" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-apple-light-gray">场景</a>
+                <a href="#comparison" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-apple-light-gray">优势</a>
+                <a href="#download" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-apple-light-gray">下载</a>
+                <a href="#download" class="block px-3 py-3 rounded-md text-base font-medium bg-primary text-white text-center mt-4">
+                    立即下载
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区 - 苹果风格 -->
+    <section id="hero" class="pt-40 pb-32 md:pt-64 md:pb-48 bg-white relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-apple-light-gray/30 to-transparent opacity-50"></div>
+        </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col items-center text-center mb-20">
+                <h1 class="hero-title text-5xl md:text-6xl lg:text-7xl mb-8 tracking-tight leading-tight animate-fade-in">
+                    哈利製
+                </h1>
+                <p class="hero-subtitle text-xl md:text-2xl text-apple-gray mb-12 max-w-3xl leading-relaxed animate-slide-up">
+                    AI 驱动的 Illustrator 插件，让设计更智能、更高效。
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-5 sm:space-y-0 sm:space-x-8 animate-slide-up" style="animation-delay: 0.2s;">
+                    <a href="#download" class="btn-primary bg-primary text-white px-10 py-4 rounded-full text-base font-medium shadow-lg">
+                        立即下载
+                    </a>
+                    <a href="#features" class="btn-outline border border-gray-300 text-dark hover:bg-gray-50 px-10 py-4 rounded-full text-base font-medium">
+                        了解更多
+                    </a>
+                </div>
+            </div>
+            <div class="flex justify-center">
+                <div class="w-full max-w-5xl product-image-container">
+                    <!-- <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/015bdaafc400420a957456100a52bb43~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260121163357AF2EBBAE5234F0001188&rrcfp=f06b921b&x-expires=1771576485&x-signature=tZe4FO1uNHydGbJINTDyCnHX7r8%3D" alt="哈利製AI插件界面" class="max-w-full h-auto product-image grayscale animate-fade-in" style="animation-delay: 0.4s;"> -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能特点 - 苹果风格 -->
+    <section id="features" class="py-24 md:py-32 bg-apple-light-gray section">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="section-title text-3xl md:text-4xl lg:text-5xl mb-6 text-dark">核心功能</h2>
+                <p class="text-lg text-apple-gray max-w-2xl mx-auto leading-relaxed">
+                    哈利製提供强大的功能，帮助设计师提升工作效率。
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                <!-- 功能卡片 1 -->
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-th-large text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">智能拼版</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        根据预设规则，自动将多个设计元素排列组合，生成最优布局。
+                    </p>
+                </div>
+                <!-- 功能卡片 2 -->
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-tags text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">一键标注</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        自动生成设计稿的尺寸、间距等标注信息，高效交付给开发团队。
+                    </p>
+                </div>
+                <!-- 功能卡片 3 -->
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-bolt text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">批量处理</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        一次性处理多个文件，应用相同的操作，节省重复劳动时间。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 工作流程 - 苹果风格 -->
+    <section class="py-24 md:py-32 bg-white section">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="section-title text-3xl md:text-4xl lg:text-5xl mb-6 text-dark">工作流程</h2>
+                <p class="text-lg text-apple-gray max-w-2xl mx-auto leading-relaxed">
+                    简单几步，让设计工作更高效
+                </p>
+            </div>
+            <div class="flex justify-center">
+                <div class="w-full max-w-5xl product-image-container">
+                    <!-- <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/b274864dc83e411999577f6b2b8ad070~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260121163357AF2EBBAE5234F0001188&rrcfp=f06b921b&x-expires=1771576493&x-signature=YWzrMZtMfOkKPSxqp4HWNrU4Vv4%3D" alt="设计工作流程" class="max-w-full h-auto product-image grayscale"> -->
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16 max-w-5xl mx-auto">
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
+                        <i class="fa fa-pencil text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-dark tracking-tight">设计需求输入</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        导入设计素材，设置基本参数和要求
+                    </p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
+                        <i class="fa fa-refresh text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-dark tracking-tight">AI辅助生成方案</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        人工智能分析需求，自动生成设计方案
+                    </p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
+                        <i class="fa fa-sliders text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-dark tracking-tight">方案优化调整</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        根据需要进行手动调整和优化
+                    </p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
+                        <i class="fa fa-file-pdf-o text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-dark tracking-tight">最终成果输出</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        一键导出符合印刷标准的文件
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 使用场景 - 苹果风格 -->
+    <section id="scenarios" class="py-24 md:py-32 bg-apple-light-gray section">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="section-title text-3xl md:text-4xl lg:text-5xl mb-6 text-dark">使用场景</h2>
+                <p class="text-lg text-apple-gray max-w-2xl mx-auto leading-relaxed">
+                    无论您是UI/UX设计师，平面设计师，图文设计师，还是印前制版师，哈利製都能为您的工作流程赋能。
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-desktop text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">UI/UX 设计</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        快速创建组件库，自动标注，提升原型设计和交付效率。
+                    </p>
+                </div>
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-picture-o text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">平面设计</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        批量生成海报、名片等，智能排版，节省重复工作时间。
+                    </p>
+                </div>
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-file text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">图文设计</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        快速版式优化与内容生成，极大提升制作效率，让重复工作化繁为简。
+                    </p>
+                </div>
+                <div class="bg-white p-10 rounded-2xl shadow-md card-hover">
+                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-110">
+                        <i class="fa fa-line-chart text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-dark tracking-tight">印前制版</h3>
+                    <p class="text-apple-gray leading-relaxed">
+                        批量拼版，快速生成印刷信息，减少出错率，节约成本。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 优势对比 - 苹果风格 -->
+    <section id="comparison" class="py-24 md:py-32 bg-white section">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="section-title text-3xl md:text-4xl lg:text-5xl mb-6 text-dark">为什么选择哈利製？</h2>
+                <p class="text-lg text-apple-gray max-w-2xl mx-auto leading-relaxed">
+                    相比传统的设计流程，哈利製能为您带来显著的优势。
+                </p>
+            </div>
+            <div class="max-w-5xl mx-auto">
+                <div class="space-y-12">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
+                        <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                            <i class="fa fa-clock-o text-primary text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-3 text-dark tracking-tight">提升效率</h3>
+                            <p class="text-apple-gray text-lg leading-relaxed">
+                                自动化重复任务，将设计效率提升 50% 以上，让您专注于创意本身。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
+                        <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                            <i class="fa fa-refresh text-primary text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-3 text-dark tracking-tight">AI 驱动</h3>
+                            <p class="text-apple-gray text-lg leading-relaxed">
+                                利用人工智能技术，提供智能建议和预测，帮助您做出更好的设计决策。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
+                        <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                            <i class="fa fa-sliders text-primary text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-3 text-dark tracking-tight">易于使用</h3>
+                            <p class="text-apple-gray text-lg leading-relaxed">
+                                直观的用户界面，简单易用的操作流程，无需复杂的学习即可上手。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载区域 - 苹果风格 -->
+    <section id="download" class="py-24 md:py-32 bg-apple-light-gray section relative overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-30">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-color-primary)_0,_transparent_70%)] opacity-5"></div>
+        </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="section-title text-3xl md:text-4xl lg:text-5xl mb-8 text-dark">立即体验哈利製</h2>
+                <p class="text-lg text-apple-gray mb-12 leading-relaxed">
+                    下载哈利製插件，开启您的智能设计之旅。
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-5 sm:space-y-0 sm:space-x-8">
+                    <a href="javascript:void(0);" onclick="openModal(modal1)" class="btn-primary bg-primary text-white px-10 py-4 rounded-full text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center">
+                        <i class="fa fa-download mr-3"></i>
+                        免费下载
+                    </a>
+                    <a href="javascript:void(0);" onclick="openModal(modal2)" class="btn-outline border border-gray-300 text-dark hover:bg-gray-50 px-10 py-4 rounded-full text-base font-medium transition-all duration-300 flex items-center justify-center">
+                        <i class="fa fa-shopping-cart mr-3"></i>
+                        了解付费版
+                    </a>
+                </div>
+                <p class="text-sm text-apple-gray mt-10">
+                    支持 Illustrator 2022 及以上版本。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div id="downloadModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal(modal1)">&times;</span>
+        <h3 class="font-semibold">按系统下载版本</h3>
+        <div class="download-list">
+            <a href="/asset/hallian-COL.exe" download>Col. 红版 (Windows)</a>
+            <a href="/asset/hallian-COL.pkg" download>Col. 红版 (macOS)</a>
+            <a href="/asset/hallian-Basic.exe" download>Basic 橙版 (Windows)</a>
+            <a href="/asset/hallian-Basic.pkg" download>Basic 橙版 (macOS)</a>
+            <a href="/asset/hallian-Design.exe" download>Design 黄版 (Windows)</a>
+            <a href="/asset/hallian-Design.pkg" download>Design 黄版 (macOS)</a>
+            <a href="/asset/hallian-PRO.exe" download>Pro 绿版 (Windows)</a>
+            <a href="/asset/hallian-PRO.pkg" download>Pro 绿版 (macOS)</a>
+            <a href="/asset/hallian-AUTO.exe" download>Auto 青版 (Windows)</a>
+            <a href="/asset/hallian-AUTO.pkg" download>Auto 青版 (macOS)</a>
+        </div>
+    </div>
+</div>
+
+<div id="PayModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal(modal2)">&times;</span>
+        <h3>订阅费用告知(台)</h3>
+        <div class="download-list">
+            <a>Col.红版-99 RMB/年</a>
+            <a>Basic橙版-199 RMB/年</a>
+            <a>Des黄版-399 RMB/年</a>
+            <a>Pro绿版-2000 RMB/年</a>
+            <a>Auto青版-5000 RMB/年</a>
+        </div>
+    </div>
+</div>
+
+    <!-- 页脚 - 苹果风格 -->
+    <footer class="bg-dark text-white py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-8 md:mb-0">
+                    <svg enable-background="new 0 0 50 50" height="25" viewBox="0 0 131.95 131.95" width="25" xmlns="http://www.w3.org/2000/svg" fill=white>
+                    <path d="m65.97,0C29.54,0,0,29.54,0,65.97s29.54,65.97,65.97,65.97,65.97-29.54,65.97-65.97S102.41,0,65.97,0Zm4.73,106.75h-9.46v-15.11c-.05-3.34-.58-9.1-3.55-15.45-3.62-7.72-8.96-12.27-11.76-14.35v44.91h-9.46V25.2h9.46v27.17c3.64,2.7,9.94,7.99,15.31,16.45,1.31,2.06,2.57,4.32,3.72,6.77,4.81,10.27,5.66,19.59,5.75,25v6.16Zm24.77,0h-9.46v-27.17c-3.64-2.7-9.94-7.99-15.31-16.45-1.31-2.06-2.57-4.32-3.72-6.77-4.81-10.27-5.66-19.59-5.75-25v-6.16h9.46v15.11c.05,3.34.58,9.1,3.55,15.45,3.62,7.72,8.96,12.27,11.76,14.35V25.2h9.46v81.54Z"/>
+                </svg>
+                    <span class="ml-4 text-base font-semibold tracking-tight">哈利製工作室</span>
+                </div>
+                <div class="flex space-x-10">
+                    <a href="https://youtube.com/@hallian.fang?si=dspKQq0lOfv6KD1-" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-youtube text-xl"></i>
+                    </a>
+                    <a href="https://x.com/hallianfang?s=11" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-twitter text-xl"></i>
+                    </a>
+                    <a href="https://www.instagram.com/hallian.fang?igsh=MWs5OXNvMGEyazJnNQ%3D%3D&utm_source=qr" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-weixin text-xl"></i>
+                    </a>
+                    <!-- <a href="#" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-qq text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-weibo text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-github text-xl"></i>
+                    </a> -->
+                    <a href="mailto:hallian@qq.com" class="hover:text-gray-300 transition-all-300 duration-300">
+                        <i class="fa fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-10 pt-10 text-center text-sm text-gray-300">
+                <p>&copy; <script>document.write(new Date().getFullYear())</script> 哈利製工作室. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 20) {
+                navbar.classList.add('sticky-nav', 'shadow-md');
+            } else {
+                navbar.classList.remove('sticky-nav', 'shadow-md');
+            }
+        });
+
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            if (!mobileMenu.classList.contains('hidden')) {
+                document.body.classList.add('overflow-hidden');
+            } else {
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // 关闭移动端菜单
+                    mobileMenu.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                    
+                    // 滚动到目标位置
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 滚动动画
+        const sections = document.querySelectorAll('.section');
+        function checkSections() {
+            const triggerBottom = window.innerHeight * 0.75;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < triggerBottom) {
+                    section.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkSections);
+        checkSections();
+
+        // Active nav link
+        const navLinks = document.querySelectorAll('.nav-link');
+        function setActiveLink() {
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 150) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', setActiveLink);
+        setActiveLink();
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!menuToggle.contains(event.target) && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            checkSections();
+            setActiveLink();
+        });
+
+        // 获取弹窗元素
+    var modal1 = document.getElementById('downloadModal');
+    var modal2 = document.getElementById('PayModal');
+
+    // 打开弹窗
+    function openModal(modal) {
+        modal.style.display = 'block';
+    }
+
+    // 关闭弹窗
+    function closeModal(modal) {
+        modal.style.display = 'none';
+    }
+
+    // 点击弹窗外部也可以关闭
+    window.onclick = function(event) {
+    // 如果点击的元素包含 'modal' 类（即点击了遮罩背景）
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+}
+    </script>
+</body>
+</html>
