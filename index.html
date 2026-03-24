@@ -825,7 +825,7 @@
                         class="hover:text-gray-300 transition-all-300 duration-300">
                         <i class="fa-brands fa-tiktok text-xl"></i>
                     </a>
-                    <a class="hover:text-gray-300 transition-all-300 duration-300 relative">
+                    <a class="qr-link hover:text-gray-300 transition-all-300 duration-300 relative">
                         <i class="fa-brands fa-weixin text-xl"></i>
                         <div class="qrcode absolute top-full left-1/2 transform -translate-x-1/2 hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="80" height="80"
@@ -1968,6 +1968,19 @@
 
     <!-- JavaScript -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const qrLink = document.querySelector('.qr-link');
+        const qrcode = document.querySelector('.qrcode');
+        qrLink.addEventListener('click', function(event) {
+            event.preventDefault(); // 阻止链接的默认行为
+            if (qrcode.style.display === 'block') {
+                qrcode.style.display = 'none';
+            } else {
+                qrcode.style.display = 'block';
+            }
+        });
+    });
+        
         function switchLanguage(lang) {
             document.querySelectorAll('.language-switch').forEach(element => {
                 if (element.getAttribute('lang') === lang) {
